@@ -1,4 +1,4 @@
-This is a growing collection of helper methods in a Category on UIView.
+This is a growing collection of helper methods in a Category on UIView. Includes a collection of unit tests.
 
 <br/>
 Match subviews against a block
