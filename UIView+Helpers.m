@@ -21,26 +21,9 @@ do { \
                includeSubclasses:(BOOL)includeSubclasses
                         maxDepth:(NSInteger)maxDepth;
 @end
+
 @implementation UIView (Helpers)
 
--(NSArray*)subviewsPassingTest:(BOOL(^)(UIView *subview, BOOL *stop))test
-                      maxDepth:(NSInteger)maxDepth {
-    
-    if (maxDepth < 0) {
-        [NSException raise:NSInvalidArgumentException format:@"maxDepth must be >= 0"];
-    }
-    
-    BOOL(^newTest)(UIView *subview, BOOL*stop) = ^BOOL(UIView* subview, BOOL *stop) {
-        UIView *node = subview;
-        int currentDepth = 0; // We're automatically starting at "1" (i.e. first subview of self)
-        
-        while ((node = [node superview])) {
-            if (++currentDepth > maxDepth) return NO;
-        }
-        return test(subview, stop);
-    };
-    return [self subviewsPassingTest:newTest];
-}
 -(NSArray*)subviewsPassingTest:(BOOL(^)(UIView *subview, BOOL *stop))test {
     __block BOOL stop = NO;
     
@@ -60,6 +43,30 @@ do { \
     capturedEvaluateAndRecurse = evaluateAndRecurse;
     
     return evaluateAndRecurse(self);
+}
+
+-(NSArray*)subviewsPassingTest:(BOOL(^)(UIView *subview, BOOL *stop))test
+                      maxDepth:(NSInteger)maxDepth {
+    
+    if (maxDepth < 0) {
+        [NSException raise:NSInvalidArgumentException format:@"maxDepth must be >= 0"];
+    }
+    
+    // Wrap "test" block argument in a new block that checks
+    // subview depth prior to executing "test."
+    BOOL(^newTest)(UIView *subview, BOOL*stop) = ^BOOL(UIView* subview, BOOL *stop) {
+        int currentDepth = 0;
+        
+        UIView *node = subview;
+        while (!([node isEqual:self])) {
+            node = [node superview];
+            // If "subview" is deeper than maxDepth, we can safely exclude
+            // this subview without executing "test"
+            if (++currentDepth > maxDepth) return NO;
+        }
+        return test(subview, stop);
+    };
+    return [self subviewsPassingTest:newTest];
 }
 
 -(NSArray*)subviewsMatchingClass:(Class)aClass {

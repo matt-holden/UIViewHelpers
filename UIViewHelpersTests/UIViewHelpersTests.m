@@ -170,6 +170,9 @@ UIView* loadFromNib() {
         const int MAX_DEPTH = DEPTH_TO_MAKE / 2;
         NSArray *passes = [rootView subviewsMatchingClass:classes[i]
                                                  maxDepth:MAX_DEPTH];
+        NSLog(@"passes: %@", passes);
+        NSLog(@"equal? %i", [passes count] == MAX_DEPTH/CLASSES_COUNT);
+        
         STAssertTrue([passes count] == MAX_DEPTH/CLASSES_COUNT,
                      @"%i of %i of the subviews found checked were of class %@.  Expecting %i",
                      [passes count], MAX_DEPTH, classes[i], MAX_DEPTH/CLASSES_COUNT);
