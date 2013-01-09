@@ -101,35 +101,114 @@ UIView* loadFromNib() {
     UIView *node, *rootView;
     node = rootView = [[UIView alloc] init];
     
-    int i = 5;
+    const int DEPTH_TO_MAKE = 6;
+    int i = DEPTH_TO_MAKE;
     while (i--) {
         UIView *subview = [[UIView alloc] init];
-        subview.tag = 5-i;
+        [subview setTag:DEPTH_TO_MAKE-i];
         [node addSubview:subview];
         node = subview;
     }
     
-    int maxDepth = 2;
-    NSArray *passedViews = [rootView subviewsPassingTest:^BOOL(UIView *subview, BOOL *stop) {
-        return YES;
-    } maxDepth:maxDepth];
+    const int testDepths[5] = {1, 2, 3, 4, 5};
+    for (int i = 0; i < 5; i++) {
+        int maxDepth = testDepths[i];
+        NSArray *passedViews = [rootView subviewsPassingTest:^BOOL(UIView *subview, BOOL *stop) {
+            return YES;
+        } maxDepth:maxDepth];
+        
+        // There is one child view for each view, so we can expect to find N UIViews for maxDepth = N
+        STAssertTrue([passedViews count] == maxDepth, @"Found %i subviews, should have found %i", [passedViews count], maxDepth);
+        
+        // Sort on Tag property to prepare for the test that follow
+        passedViews = [passedViews sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            int first = [((UIView*)obj1) tag];
+            int second = [((UIView*)obj2) tag];
+            if (first < second)
+                return NSOrderedAscending;
+            else if (first > second)
+                return NSOrderedDescending;
+            else
+                return NSOrderedSame;
+        }];
+        
+        // Test that we received the correct subviews (not just the correct count of subviews!)
+        // This is why we've set the .tag property above
+        for (int j = 0; j < maxDepth; j++) {
+            STAssertTrue([(UIView*)passedViews[j] tag] == j+1, @"When testing maxDepth %i, the %i-th passed subview had the correct tag %i", maxDepth, j, j+1);
+        }
+    }
+}
+
+-(void) testSubviewsMatchingClass {
+    UIView *node, *rootView;
+    node = rootView = [[UIView alloc] init];
     
-    STAssertTrue([passedViews count] == maxDepth, @"Found %i subviews, should have found %i", [passedViews count], maxDepth);
-    passedViews = [passedViews sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        int first = [((UIView*)obj1) tag];
-        int second = [((UIView*)obj2) tag];
-        if (first < second)
-            return NSOrderedAscending;
-        else if (first > second)
-            return NSOrderedDescending;
-        else
-            return NSOrderedSame;
-    }];
-    STAssertTrue([passedViews count]
-                 && [passedViews count] == 2
-                 && ((UIView*)passedViews[0]).tag == 1
-                 && ((UIView*)passedViews[1]).tag == 2,
-                 @"Found correct views with expected Tag properties");
+    const int CLASSES_COUNT = 2;
+    Class classes[CLASSES_COUNT] = {[UIView class], [UIButton class]};
+    const int DEPTH_TO_MAKE = 8;
+    NSAssert((DEPTH_TO_MAKE % CLASSES_COUNT == 0) && ((DEPTH_TO_MAKE/2) % 2 == 0), @"Note to self... these tests will start to fail if the DEPTH_TO_MAKE isn't a multiple of CLASSES_COUNT.  DEPTH_TO_MAKE / 2 should also be an even number.");
     
+    int i = DEPTH_TO_MAKE;
+    while (i--) {
+        UIView *subview = [[classes[i%2] alloc] init];
+        [node addSubview:subview];
+        node = subview;
+    }
+    
+    // Without maxDepth limitation
+    for (int i = 0; i < CLASSES_COUNT; i++) {
+        NSArray *passes = [rootView subviewsMatchingClass:classes[i]];
+        STAssertTrue([passes count] == DEPTH_TO_MAKE/CLASSES_COUNT,
+                     @"%i of %i of the subviews were of class %@.  Expecting %i",
+                     [passes count], DEPTH_TO_MAKE, classes[i], DEPTH_TO_MAKE/CLASSES_COUNT);
+    }
+    
+    // With maxDepth
+    for (int i = 0; i < CLASSES_COUNT; i++) {
+        // Test again, restricting maxDepth to one half the total subviews created
+        const int MAX_DEPTH = DEPTH_TO_MAKE / 2;
+        NSArray *passes = [rootView subviewsMatchingClass:classes[i]
+                                                 maxDepth:MAX_DEPTH];
+        STAssertTrue([passes count] == MAX_DEPTH/CLASSES_COUNT,
+                     @"%i of %i of the subviews found checked were of class %@.  Expecting %i",
+                     [passes count], MAX_DEPTH, classes[i], MAX_DEPTH/CLASSES_COUNT);
+    }
+}
+
+-(void) testSubviewsMatchingClassOrSubClass {
+    
+    UIView *node, *rootView;
+    node = rootView = [[UIView alloc] init];
+    
+    const int CLASSES_COUNT = 2;
+    Class classes[CLASSES_COUNT] = {[UIView class], [UIButton class]};
+    const int DEPTH_TO_MAKE = 8;
+    NSAssert((DEPTH_TO_MAKE % CLASSES_COUNT == 0) && ((DEPTH_TO_MAKE/2) % 2 == 0), @"Note to self... these tests will start to fail if the DEPTH_TO_MAKE isn't a multiple of CLASSES_COUNT.  DEPTH_TO_MAKE / 2 should also be an even number.");
+    
+    int i = DEPTH_TO_MAKE;
+    while (i--) {
+        UIView *subview = [[classes[i%2] alloc] init];
+        [node addSubview:subview];
+        node = subview;
+    }
+    
+    // Test against the "UIView" class. Because all subviews are UIView subclasses,
+    // Every subview should be included in the result set.
+    
+    NSArray *passes;
+    // Without maxDepth limitation
+    passes = [rootView subviewsMatchingClassOrSubclass:[UIView class]];
+    STAssertTrue([passes count] == DEPTH_TO_MAKE,
+                 @"%i of %i of the subviews were of class %@.  Expecting %i",
+                 [passes count], DEPTH_TO_MAKE, classes[i], DEPTH_TO_MAKE);
+    
+   // Test again, restricting maxDepth to one half the total subviews created
+    const int MAX_DEPTH = DEPTH_TO_MAKE / 2;
+    passes = [rootView subviewsMatchingClassOrSubclass:[UIView class]
+                                    maxDepth:MAX_DEPTH];
+    STAssertTrue([passes count] == MAX_DEPTH,
+                 @"%i of %i of the subviews found checked were of class %@.  Expecting %i",
+                 [passes count], MAX_DEPTH, classes[i], MAX_DEPTH);
 }
 @end
