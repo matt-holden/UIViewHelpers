@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A201402169CE76E00A5ED14 /* TestView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A201401169CE76E00A5ED14 /* TestView.xib */; };
 		2ACC5DB6169C8D0200689EBD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ACC5DB5169C8D0200689EBD /* UIKit.framework */; };
 		2ACC5DB8169C8D0200689EBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ACC5DB7169C8D0200689EBD /* Foundation.framework */; };
 		2ACC5DBA169C8D0200689EBD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ACC5DB9169C8D0200689EBD /* CoreGraphics.framework */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2A201401169CE76E00A5ED14 /* TestView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TestView.xib; sourceTree = "<group>"; };
 		2ACC5DB1169C8D0200689EBD /* UIViewHelpers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIViewHelpers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2ACC5DB5169C8D0200689EBD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2ACC5DB7169C8D0200689EBD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -130,6 +132,7 @@
 		2ACC5DBC169C8D0200689EBD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2A201401169CE76E00A5ED14 /* TestView.xib */,
 				2ACC5DBD169C8D0200689EBD /* UIViewHelpers-Info.plist */,
 				2ACC5DBE169C8D0200689EBD /* InfoPlist.strings */,
 				2ACC5DC1169C8D0200689EBD /* main.m */,
@@ -237,6 +240,7 @@
 				2ACC5DC8169C8D0200689EBD /* Default.png in Resources */,
 				2ACC5DCA169C8D0200689EBD /* Default@2x.png in Resources */,
 				2ACC5DCC169C8D0200689EBD /* Default-568h@2x.png in Resources */,
+				2A201402169CE76E00A5ED14 /* TestView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +444,7 @@
 				2ACC5DE6169C8D0200689EBD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2ACC5DE7169C8D0200689EBD /* Build configuration list for PBXNativeTarget "UIViewHelpersTests" */ = {
 			isa = XCConfigurationList;
@@ -448,6 +453,7 @@
 				2ACC5DE9169C8D0200689EBD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

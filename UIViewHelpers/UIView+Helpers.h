@@ -10,4 +10,10 @@
 
 @interface UIView (Helpers)
 
+-(NSArray*)subviewsPassingTest:(BOOL(^)(UIView *subview, BOOL *stop))test;
+-(NSArray*)subviewsPassingTest:(BOOL(^)(UIView *subview, BOOL *stop))test
+                      maxDepth:(NSInteger)depth;
+-(NSArray*)subviewsMatchingClass:(__unsafe_unretained Class)aClass;
+
+
 @end
