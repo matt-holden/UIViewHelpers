@@ -24,7 +24,6 @@
 		2ACC5DD6169C8D0200689EBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ACC5DB7169C8D0200689EBD /* Foundation.framework */; };
 		2ACC5DDE169C8D0200689EBD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2ACC5DDC169C8D0200689EBD /* InfoPlist.strings */; };
 		2ACC5DE1169C8D0200689EBD /* UIViewHelpersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ACC5DE0169C8D0200689EBD /* UIViewHelpersTests.m */; };
-		2ACC5DEF169C8D7200689EBD /* UIView+HelpersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ACC5DEE169C8D7200689EBD /* UIView+HelpersTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,8 +60,6 @@
 		2ACC5DDD169C8D0200689EBD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2ACC5DDF169C8D0200689EBD /* UIViewHelpersTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIViewHelpersTests.h; sourceTree = "<group>"; };
 		2ACC5DE0169C8D0200689EBD /* UIViewHelpersTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIViewHelpersTests.m; sourceTree = "<group>"; };
-		2ACC5DED169C8D7200689EBD /* UIView+HelpersTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+HelpersTests.h"; sourceTree = "<group>"; };
-		2ACC5DEE169C8D7200689EBD /* UIView+HelpersTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+HelpersTests.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,8 +150,6 @@
 				2ACC5DDA169C8D0200689EBD /* Supporting Files */,
 				2ACC5DDF169C8D0200689EBD /* UIViewHelpersTests.h */,
 				2ACC5DE0169C8D0200689EBD /* UIViewHelpersTests.m */,
-				2ACC5DED169C8D7200689EBD /* UIView+HelpersTests.h */,
-				2ACC5DEE169C8D7200689EBD /* UIView+HelpersTests.m */,
 			);
 			path = UIViewHelpersTests;
 			sourceTree = "<group>";
@@ -290,7 +285,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2ACC5DE1169C8D0200689EBD /* UIViewHelpersTests.m in Sources */,
-				2ACC5DEF169C8D7200689EBD /* UIView+HelpersTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
