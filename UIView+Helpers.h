@@ -10,6 +10,8 @@
 
 @interface UIView (Helpers)
 
+-(UIView*)firstSubviewPassingTest:(BOOL(^)(UIView *subview))test;
+
 -(NSArray*)subviewsPassingTest:(BOOL(^)(UIView *subview, BOOL *stop))test;
 -(NSArray*)subviewsPassingTest:(BOOL(^)(UIView *subview, BOOL *stop))test
                       maxDepth:(NSInteger)depth;
@@ -21,5 +23,4 @@
 -(NSArray*)subviewsMatchingClassOrSubclass:(Class)aClass;
 -(NSArray*)subviewsMatchingClassOrSubclass:(Class)aClass
                                   maxDepth:(NSInteger)depth;
-
 @end

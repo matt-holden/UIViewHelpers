@@ -69,6 +69,17 @@ do { \
     return [self subviewsPassingTest:newTest];
 }
 
+-(UIView*)firstSubviewPassingTest:(BOOL(^)(UIView *subview))test {
+    BOOL(^innerTestBlock)(UIView *subview, BOOL *stop) = ^BOOL(UIView *subview, BOOL *stop) {
+        // Stop the moment we have a passing test
+        BOOL passed = *stop = test(subview);
+        return passed;
+    };
+    
+    NSArray *returnArray = [self subviewsPassingTest:innerTestBlock];
+    return [returnArray count] ? returnArray[0] : nil;
+}
+
 -(NSArray*)subviewsMatchingClass:(Class)aClass {
     return [self subviewsMatchingClass:[aClass class]
                      includeSubclasses:NO
@@ -94,6 +105,7 @@ do { \
                               maxDepth:depth];
     
 }
+
 
 #pragma mark Private methods
 -(NSArray*)subviewsMatchingClass:(Class)aClass

@@ -214,4 +214,71 @@ UIView* loadFromNib() {
                  @"%i of %i of the subviews found checked were of class %@.  Expecting %i",
                  [passes count], MAX_DEPTH, classes[i], MAX_DEPTH);
 }
+
+-(void)testFirstSubviewPassingTest {
+    
+    const int DEPTH_TO_MAKE = 5;
+    const int TEST_TAG = 123;
+    int i = DEPTH_TO_MAKE;
+    
+    UIView *node, *rootView, *taggedView;
+    node = rootView = [[UIView alloc] init];
+    while (i--) {
+        UIView *subview = [[UIView alloc] init];
+        [node addSubview:subview];
+        node = subview;
+        
+        if (i == DEPTH_TO_MAKE / 2) {
+            // Half-way through, tag the current
+            // UIView, and set it = taggedView
+            node.tag = TEST_TAG;
+            taggedView = node;
+        }
+    }
+    
+    UIView *foundView = [rootView firstSubviewPassingTest:^BOOL(UIView *subview) {
+        return subview.tag == TEST_TAG;
+    }];
+    
+    STAssertEqualObjects(foundView, taggedView, @"firstSubViewPassingTest: returned the UIView that we had tagged for testing");
+    
+}
+
+-(void)testFirstSubviewPassingTestStopsAfterFindingFirstObject {
+    
+    const int DEPTH_TO_MAKE = 1232;
+    const int TEST_TAG = 123;
+    int i = DEPTH_TO_MAKE;
+    
+    UIView *node, *rootView;
+    node = rootView = [[UIView alloc] init];
+    while (i--) {
+        UIView *subview = [[UIView alloc] init];
+        [node addSubview:subview];
+        node = subview;
+        
+        if (i > DEPTH_TO_MAKE / 2) {
+            // Half-way through, tag all remaining
+            // views with TEST_TAG
+            node.tag = TEST_TAG;
+        }
+    }
+    
+    __block BOOL hasFoundMatch = NO;
+    __block int invocationsAfterFindingMatch = 0;
+   [rootView firstSubviewPassingTest:^BOOL(UIView *subview) {
+        if (hasFoundMatch) {
+            invocationsAfterFindingMatch++;
+        }
+        
+        hasFoundMatch = (subview.tag == TEST_TAG);
+        return hasFoundMatch;
+    }];
+    
+    STAssertTrue(invocationsAfterFindingMatch == 0, @"Block was invoked %i times after finding the first  matching subview", invocationsAfterFindingMatch);
+    
+    
+    
+}
+
 @end
