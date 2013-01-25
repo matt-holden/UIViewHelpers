@@ -17,21 +17,6 @@ Say you wanted to find your application's "first responder."  Using the category
         }];
     }
 
-
-<br/>
-Match subviews against a block
--
-
-Find the first subview of `self` for which the block `test` returns `YES`, and immediately cease recursion:
-
-    -(UIView*)firstSubviewPassingTest:(BOOL(^)(UIView *subview))test;
-
-Collect all subviews of `self` for which the block `test` returns `YES`:
-    
-    -(NSArray*)subviewsPassingTest:(BOOL(^)(UIView *subview, BOOL *stop))test;
-
-Collect all subviews, **(traversed to a maximum `depth`)** of `self` for which the block `test` returns `YES`:
-    
     -(NSArray*)subviewsPassingTest:(BOOL(^)(UIView *subview, BOOL *stop))test
                           maxDepth:(NSInteger)depth;
 
