@@ -5,6 +5,18 @@ As of now, every method in this category is dedicated to recursing subviews of a
 Say you wanted to find your application's "first responder."  Using the category method `firstSubviewPassingTest:`, you could easily iterate all your application's subviews to locate the first responder.
 
 
+    -(UIView*)findCurrentFirstResponder {
+        // Get the app's highest-level view
+        UIView *rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
+        
+        // Recurse through all its subviews to find the first responder
+        return [rootView firstSubviewPassingTest:^BOOL(UIView *subview) {
+            if ([subview isKindOfClass:[UIResponder class]])
+                return [(UIResponder*)subview isFirstResponder];
+            else return NO;
+        }];
+    }
+
     -(NSArray*)subviewsPassingTest:(BOOL(^)(UIView *subview, BOOL *stop))test
                           maxDepth:(NSInteger)depth;
 
